@@ -559,7 +559,7 @@ void floyd_warshalls_input() //adjacency list
 	floyd_warshalls(n, adj);
 }
 
-// Count number of connected components
+// Count number of connected components in undirected graph
 // int count_connected_components(vector<int> adj[], int n)
 // {
 // 	vector<bool> vis(n+1, false);
@@ -663,6 +663,58 @@ void topological_sort(vector<vector<int> >& adj, int n)
 
 	for(int x: ans) cout<<x<<" "; cout<<"\n";
 }
+
+
+// Eulerian graph
+void _dfs(vector<vector<int> >  &adj, int i, vector<int> &vis){
+	vis[i] = true;
+
+	for(int nbr: adj[i]){
+		if(!vis[nbr]){
+			_dfs(adj, nbr, vis);
+		}
+	}
+}
+
+bool isConnected(vector<vector<int> >  &adj)
+{
+	int n = adj.size();
+
+	vector<bool> vis(n, false);
+
+	int i;
+	for(i=0;i<n;i++){
+		if(adj[i]){
+			_dfs(adj, i, vis);
+			break;
+		}
+	}
+
+	if(i==n) return true;
+
+	for(i=0;i<n;i++){
+		if(adj[i]>0 && !vis[i]) return false;
+	}
+	return true;
+}
+
+
+
+void isEulerian(vector<vector<int> >  &adj){
+	if(! isConnected(adj)){ cout<<"no\n"; return; }
+
+	int odd = 0;
+	for(int i=0;i<adj.size();i++){
+		if(adj[i].size() & 1) odd ++;
+	}
+
+	if(odd > 2){ cout<<"no\n"; return;}
+
+	if(odd == 2){ cout<<"has eulerean path but no eulerian cycle\n"; return;}
+	if(odd == 0){ cout<<"Eulerian\n"; return;}
+	cout<<"no\n";
+}
+
 
 
 
